@@ -38,6 +38,7 @@ h1{font-size:26px;margin:8px 0 4px}
 .hide{display:none}
 .res ul{margin:4px 0 12px;padding-left:1.2em;font-size:17px}.res li{margin:4px 0}.res h3{font-size:19px;margin:12px 0 2px;color:var(--ac)}.tag{display:inline-block;font-size:18px;background:var(--acbg);color:var(--ac);border-radius:14px;padding:3px 14px;font-weight:700}.big2{font-size:22px;font-weight:800;margin:6px 0}
 .chan ul{font-size:19px;line-height:1.7}.chan li{margin:8px 0}.chan .desc{font-size:16px}
+.line{display:block;text-align:center;text-decoration:none;font-weight:700;font-size:18px;padding:14px;border-radius:12px;background:#06C755;color:#fff;margin:16px 0}
 </style>
 </head>
 <body>
@@ -118,8 +119,9 @@ function showResult(fromSaved,ts){
   ord.map(k=>`<div class="row ${tops.includes(k)?'top':''}"><div class="l"><span>${T[k]}</span><span>${sc[k]}点</span></div><div class="bb"><i style="width:${sc[k]/20*100}%"></i></div></div>`).join('')+
   `<p class="desc">※満点は各タイプ20点(合計50点)</p></div>`+
   detailHtml(tops,ord,sc)+chanHtml(tops,ord,sc)+
-  `<button class="again" id="again">もう一度やる</button>`;
-  $('again').onclick=()=>{try{localStorage.removeItem('yuui-v1')}catch(e){}S.forEach((_,i)=>S[i]=[]);r.classList.add('hide');render();scrollTo({top:0,behavior:'smooth'})};
+  `<p class="desc" style="font-size:16px;text-align:center;margin-bottom:0">ボタンを押すとLINEが開くよ。最後に「送信」を押すと、結果が届くよ！</p><a class="line" id="line" target="_blank" rel="noopener">公式LINEに結果を送る</a><button class="again" id="again">もう一度やる</button>`;
+  $('line').href='https://line.me/R/oaMessage/@650kvpox/?'+encodeURIComponent('優位感覚テストの結果です！\n1位：'+tops.map(k=>T[k]).join('×')+'（'+mx+'点）\n'+ord.map(k=>T[k].replace('優位','')+sc[k]+'点').join(' / '));
+$('again').onclick=()=>{try{localStorage.removeItem('yuui-v1')}catch(e){}S.forEach((_,i)=>S[i]=[]);r.classList.add('hide');render();scrollTo({top:0,behavior:'smooth'})};
   if(fromSaved){const d=ts?new Date(ts):null;const ds=d?d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' の':'';r.insertAdjacentHTML('afterbegin','<p class="desc">前回('+ds+'結果)を表示してるよ。やり直したいときは一番下の「もう一度やる」を押してね。</p>')}else{save();r.scrollIntoView({behavior:'smooth'})}
 }
 $('go').addEventListener('click',()=>showResult(false));
