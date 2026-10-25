@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>優位感覚テスト</title>
+<style>
+:root{--bg:#fffaf5;--card:#fff;--tx:#3a2e2e;--sub:#8a7b7b;--ac:#e0698a;--acbg:#fde8ef;--bd:#eadcdc;--bar:#e0698a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1e1a1b;--card:#2a2425;--tx:#f3eaea;--sub:#b3a3a5;--ac:#f08aa8;--acbg:#4a2b36;--bd:#4a3f40;--bar:#f08aa8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1e1a1b;--card:#2a2425;--tx:#f3eaea;--sub:#b3a3a5;--ac:#f08aa8;--acbg:#4a2b36;--bd:#4a3f40;--bar:#f08aa8;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
+main{max-width:560px;margin:0 auto;padding:16px}
+h1{font-size:20px;margin:8px 0 4px}
+.lead{font-size:13px;color:var(--sub);margin:0 0 12px}
+.prog{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5;font-size:13px;color:var(--sub)}
+.pbar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin-top:4px}
+.pbar i{display:block;height:100%;background:var(--bar);width:0;transition:width .3s}
+.q{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+.q h2{font-size:15px;margin:0 0 4px}
+.hint{font-size:12px;color:var(--sub);margin:0 0 8px}
+.o{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--tx);background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer}
+.o.on{background:var(--acbg);border-color:var(--ac)}
+.pt{flex:none;min-width:34px;height:26px;border-radius:13px;border:1.5px dashed var(--bd);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--sub)}
+.o.on .pt{background:var(--ac);border:none;color:#fff;font-weight:700}
+.rs{font-size:12px;color:var(--ac);background:none;border:none;cursor:pointer;padding:4px 0}
+.go,.again{display:block;width:100%;font:inherit;font-weight:700;font-size:16px;padding:14px;border-radius:12px;border:none;background:var(--ac);color:#fff;cursor:pointer;margin:16px 0}
+.go:disabled{opacity:.4;cursor:not-allowed}
+.again{background:none;border:1.5px solid var(--ac);color:var(--ac)}
+.res{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:16px;margin:12px 0}
+.big{font-size:22px;font-weight:800;color:var(--ac);margin:0 0 6px}
+.row{margin:10px 0}
+.row div.l{display:flex;justify-content:space-between;font-size:14px}
+.bb{height:12px;background:var(--bd);border-radius:6px;overflow:hidden;margin-top:3px}
+.bb i{display:block;height:100%;background:var(--bar);border-radius:6px}
+.row.top .l{font-weight:700}
+.desc{font-size:13px;color:var(--sub);margin:4px 0}
+.hide{display:none}
+.res ul{margin:4px 0 12px;padding-left:1.2em;font-size:14px}.res li{margin:4px 0}.res h3{font-size:14px;margin:12px 0 2px;color:var(--ac)}.tag{display:inline-block;font-size:12px;background:var(--acbg);color:var(--ac);border-radius:10px;padding:2px 10px;font-weight:700}.big2{font-size:17px;font-weight:800;margin:6px 0}
+</style>
+</head>
+<body>
+<main>
+<h1>優位感覚テスト</h1>
+<p class="lead">各設問の4つの文を、「自分に当てはまる順」にタップ。<br>1番目=4点 → 2番目=3点 → 3番目=2点 → 4番目=1点。同じ点は2回使えないよ。</p>
+<div class="prog"><span id="pt">0 / 5 問 回答済み</span><div class="pbar"><i id="pb"></i></div></div>
+<div id="qs"></div>
+<button class="go" id="go" disabled>結果を見る</button>
+<div id="result" class="hide"></div>
+</main>
+<script>
+const T={v:'視覚優位',a:'聴覚優位',k:'体感覚優位',l:'言語感覚優位'};
+const D={
+v:'図・イラスト・色で全体像をつかむのが得意。見た感じ、外見、整理整頓を大切にする。資料は図やチャート、色分け、メモで入れるとスッと入る。',
+a:'聞いて理解するのが得意。声のトーンや音に敏感で、音声や会話から学ぶと身につく。静かな環境を整えると集中しやすい。',
+k:'実際にやってみる・触れる・感じることで理解が進む。腑に落ちる感覚や着心地、座り心地を大事にする。体験や実践ワークで学ぶと強い。',
+l:'情報を調べて、論理的に検討してから納得したい。データや言葉の筋道が大事。整理された文章や根拠のある説明で学ぶと入りやすい。'};
+const Q=[
+{t:'ア:重要な決断を下すときは',o:[['勘で決める(腑に落ちる感じ)','k'],['「聞いた感じ」のよさで決める','a'],['「見た感じ」のよさで決める','v'],['その内容をよく調べて、検討してから決める','l']]},
+{t:'イ:人と話し合う(議論する)とき、いちばん影響を受けるのは',o:[['相手の声のトーン(話し方の雰囲気)','a'],['相手の言いたいポイントが、はっきり見えるかどうか','v'],['相手の話の筋が通っているか(論理的かどうか)','l'],['相手の本当の気持ちを感じ取れて、心が通じ合っているかどうか','k']]},
+{t:'ウ:自分の気持ちは',o:[['着る服や外見で、もっともよく表現している','v'],['感情を表すことで、もっともよく表現している','k'],['言葉の選び方で、もっともよく表現している','l'],['声の調子で、もっともよく表現している','a']]},
+{t:'エ:私はどちらかというと',o:[['与えられた状況にあう音楽を選ぶことが得意である','a'],['興味深いテーマに関係した話題を選ぶことが得意である','l'],['座り心地がいい椅子を選ぶことが得意である','k'],['魅力的で豊かな色の組み合わせを選ぶことが得意である','v']]},
+{t:'オ:私が敏感なのは',o:[['私はまわりの音に敏感である','a'],['私は新しい事実やデータを理解することが得意である','l'],['私は衣服の着心地に敏感である','k'],['私は色使いや部屋の外見に敏感である','v']]}
+];
+const N={v:'ヴィジュアル',a:'オーディオ',k:'キネスセティック',l:'オーディトリー・デジタル'};
+const F={
+v:['目線は上に向きがち','胸の上半分で呼吸する','上体や頭をまっすぐ起こして座る・立つ。椅子には上体を前にのり出して座る','身なりがきちんとしていて、整理整頓を心がけている','「見た感じ」を大切にして、外見に心を動かされやすい','モノを覚えるときは、図や絵にして覚える','騒音に気持ちを乱される度合いが低い','やせ型で筋肉質','まとまった言葉を早くしゃべる。「ああ」「え〜」が多く入る'],
+a:['目を左右によく動かす','胸の中ほどで呼吸する','ひとりごとをよく言う','言葉で伝えられたことをそのまま繰り返すのが簡単にできる','音楽が好きで、電話で話すのも好き','ステップごとに手順をふんで、順番に記憶するのが得意','自分のことを「話してもらう」のが好き','声の調子や言葉に反応しやすい','まとまった言葉を早くしゃべる。「ああ」「え〜」が多く入る'],
+k:['胸の底のほうで呼吸するので、呼吸とともにお腹がふくらんだりへこんだりする','動くスピードも話すスピードもゆっくり','手ざわりのあるものや、身体の触れ合いに反応しやすい','人の近くに立とうとする(パーソナルスペースが狭い)','何かをしたり、からだを動かしたりすることで記憶する','「感触」や「感じ」で物事に興味をもつ','落ち着いたしゃべり方で、長く複雑な文を話すことができる'],
+l:['頭の中でいろいろ考えている時間が多い','意味が通るかどうかにこだわる','頭の中でいろいろ試してみる','プロセスやシステム、構造、順番に価値を置く','リストが好き','じっくり考えたいので、自発的に動くことはほとんどない','論理性を重視した話し方で、長く複雑な文章も話せる']};
+const A={
+v:['絵や図で全体像をとらえるのが得意。スライド、イラスト、チャート、フラッシュカードなど図を使おう','資料を読むときやノートをまとめるときは、蛍光ペンで色をつけたり、チャートや図を使うと効果的','言葉のつづりや歴史の事実は、ビジュアライズして覚える(目で見てイメージが頭に浮かぶようにする)','言葉で出される指示は覚えにくいので、なるべく紙に書いた指示をもらおう','何でもメモを取るくせをつけるといい'],
+a:['聞いて学ぶのが得意。読書は、録音を聴いたり音読したりしよう','授業や講義では、先生の話をよく聞いてメモすると効果的','騒音があると集中できないので、勉強するときは静かな環境を整えよう','議論に参加して学んだり、読んだ内容の要約を録音したりしよう','単語のつづりや講義の内容は、友達と話しながら覚えるといい'],
+k:['実験やロールプレイなど、体験を通して覚えよう。自分の経験と結びつけるのがコツ','単語のつづりや歴史の事実は、文章を指でなぞりながら覚える','勉強するときは、小まめに休憩を取る','学習を深めるために、コンピュータを使うのも効果的','覚えなければならないことは、身体を動かしたほうが覚えやすい。何度か実際に書いてみよう'],
+l:['学んだことを誰かと話し合うと、理解が深まる。他のことと関連づけると覚えやすい','既成の方法よりも、自分なりのまとめ方をするのがいい','記憶の方法は物事によって違うことが多いので、視覚・聴覚・体感覚それぞれの勉強方法を試してみよう','分からない言葉は辞書を引いて、学習への興味を高めよう。参考文献はまとめ読みする','頭が整理されるので、学習した内容や書いた文章を発表する機会を大切にしよう']};
+const C={
+'a-v':'見て全体像をつかみ、聞いて深める組み合わせ。図やスライドで流れを見たうえで、解説を聞いたり人に話したりすると定着しやすい。要点は「色分けメモ+音読(または録音)」の二段構えが相性◎。',
+'k-v':'図で全体像をつかみ、実際に手を動かして確かめる実践派。資料を読んだらすぐ書き出す・試す。図を自分で描きながら覚えると強いよ。',
+'l-v':'図やチャートで構造を見て、頭の中で筋道を整理するタイプ。マインドマップや表、フローチャートで、自分なりにまとめると理解が深まる。',
+'a-k':'聞いて、動いて覚える体験派。講義や音声を聞いたあとにロールプレイやワークで試す、歩きながら音声で学ぶ、などが合うよ。',
+'a-l':'聞いた内容を頭の中で整理して、言葉で話し直すと定着するタイプ。人と議論したり、要約を声に出して録音したりするのが相性◎。',
+'k-l':'じっくり考えて、体験で確かめるタイプ。考える時間と動く時間を分けて、学んだことを自分の経験や仕組みに結びつけると深まるよ。'};
+function det(k,label){return '<div class="res"><span class="tag">'+label+'</span><p class="big2">'+T[k]+'「'+N[k]+'」の人</p><h3>特徴</h3><ul>'+F[k].map(x=>'<li>'+x+'</li>').join('')+'</ul><h3>学習効果を高めるために</h3><ul>'+A[k].map(x=>'<li>'+x+'</li>').join('')+'</ul></div>'}
+function comboBox(p,q,sc){const g=Math.abs(sc[p]-sc[q]);const key=[p,q].sort().join('-');const lv=g<=2?'点差は'+g+'点。ほぼ同じ強さだから、場面によって切り替わる二刀流タイプ。':g<=5?'点差は'+g+'点。1位が軸で、2位が強力なサポート役になっているよ。':'点差は'+g+'点。1位がはっきり軸で、2位は補助的に働いているよ。';return '<div class="res"><span class="tag">組み合わせの読み方</span><p class="big2">'+T[p]+' × '+T[q]+'</p><p class="desc">'+lv+'</p><p>'+C[key]+'</p><p class="desc">※特徴をもとにした目安だよ。</p></div>'}
+const H={v:'映像・色・光・イメージとして、ふっと見えるように届く',a:'声・言葉・音・声のトーンとして、ふっと聞こえるように届く',k:'体の感覚(温かさ・ざわつき・重さ・腹に落ちる感じ)として、ふっと感じるように届く',l:'言葉・文章・「あ、そういうことか」という理解やひらめきとして、ふっと浮かぶように届く'};
+function chanHtml(tops,ord,sc){const rest=ord.filter(k=>!tops.includes(k));let li=tops.map(k=>'<li><b>'+T[k]+'</b>(届きやすい形かも):'+H[k]+'</li>').join('');if(rest.length){li+='<li><b>'+T[rest[0]]+'</b>(2番目に届きやすい形かも):'+H[rest[0]]+'</li>'}return '<div class="res"><span class="tag">チャネリングを受け取るヒント</span><p class="desc">直感は人それぞれ、届き方が違うよ。この結果は、自分にとって直感がどんな形で届きやすいかを知るヒントだよ。</p><ul>'+li+'</ul><p class="desc">決めつけではなくて、あくまで届きやすい形の目安だよ。他の形で届いても大丈夫。来たものをそのまま受け取ってね。</p></div>'}
+function detailHtml(tops,ord,sc){let h='';if(tops.length===1){h+=det(tops[0],'第1位');const rest=ord.filter(k=>!tops.includes(k));const m=sc[rest[0]];const secs=rest.filter(k=>sc[k]===m);secs.forEach(k=>{h+=det(k,'第2位')});secs.forEach(k=>{h+=comboBox(tops[0],k,sc)})}else{tops.forEach(k=>{h+=det(k,'同点1位')});for(let i=0;i<tops.length;i++)for(let j=i+1;j<tops.length;j++)h+=comboBox(tops[i],tops[j],sc)}return h}
+const S=Q.map(()=>[]);
+const $=id=>document.getElementById(id);
+function render(){
+  $('qs').innerHTML=Q.map((q,i)=>`<div class="q"><h2>${q.t}</h2><p class="hint">当てはまる順にタップ(${S[i].length}/4)</p>`+
+  q.o.map((o,j)=>{const p=S[i].indexOf(j);const on=p>=0;
+    return `<button class="o ${on?'on':''}" data-q="${i}" data-o="${j}"><span class="pt">${on?(4-p)+'点':'—'}</span><span>${o[0]}</span></button>`}).join('')+
+  `<button class="rs" data-r="${i}">この設問をやり直す</button></div>`).join('');
+  const done=S.filter(s=>s.length>=3).length;
+  $('pt').textContent=done+' / 5 問 回答済み';
+  $('pb').style.width=(done*20)+'%';
+  $('go').disabled=done<5;
+}
+$('qs').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  if(b.dataset.r!==undefined){S[+b.dataset.r]=[];render();return}
+  const i=+b.dataset.q,j=+b.dataset.o,p=S[i].indexOf(j);
+  if(p>=0){S[i]=S[i].slice(0,p)}
+  else if(S[i].length<4){S[i].push(j);if(S[i].length===3){const last=[0,1,2,3].find(x=>!S[i].includes(x));S[i].push(last)}}
+  render();
+});
+function showResult(fromSaved,ts){
+  const sc={v:0,a:0,k:0,l:0};
+  Q.forEach((q,i)=>S[i].forEach((j,p)=>{sc[q.o[j][1]]+=4-p}));
+  const mx=Math.max(...Object.values(sc));
+  const tops=Object.keys(sc).filter(k=>sc[k]===mx);
+  const ord=Object.keys(sc).sort((x,y)=>sc[y]-sc[x]);
+  const r=$('result');r.classList.remove('hide');
+  r.innerHTML=`<div class="res"><p class="desc">あなたの優位感覚は</p><p class="big">${tops.map(k=>T[k]).join(' × ')}</p>${tops.length>1?'<p class="desc">同点だったので、どちらの特徴も持つタイプ。</p>':''}`+
+  ord.map(k=>`<div class="row ${tops.includes(k)?'top':''}"><div class="l"><span>${T[k]}</span><span>${sc[k]}点</span></div><div class="bb"><i style="width:${sc[k]/20*100}%"></i></div></div>`).join('')+
+  `<p class="desc">※満点は各タイプ20点(合計50点)</p></div>`+
+  detailHtml(tops,ord,sc)+chanHtml(tops,ord,sc)+
+  `<button class="again" id="again">もう一度やる</button>`;
+  $('again').onclick=()=>{try{localStorage.removeItem('yuui-v1')}catch(e){}S.forEach((_,i)=>S[i]=[]);r.classList.add('hide');render();scrollTo({top:0,behavior:'smooth'})};
+  if(fromSaved){const d=ts?new Date(ts):null;const ds=d?d.getFullYear()+'/'+(d.getMonth()+1)+'/'+d.getDate()+' の':'';r.insertAdjacentHTML('afterbegin','<p class="desc">前回('+ds+'結果)を表示してるよ。やり直したいときは一番下の「もう一度やる」を押してね。</p>')}else{save();r.scrollIntoView({behavior:'smooth'})}
+}
+$('go').addEventListener('click',()=>showResult(false));
+function save(){try{localStorage.setItem('yuui-v1',JSON.stringify({S:S,t:Date.now()}))}catch(e){}}
+(function(){try{const d=JSON.parse(localStorage.getItem('yuui-v1')||'null');if(d&&Array.isArray(d.S)&&d.S.length===5&&d.S.every(s=>Array.isArray(s)&&s.length===4&&s.every(n=>Number.isInteger(n)&&n>=0&&n<=3)&&new Set(s).size===4)){d.S.forEach((s,i)=>{S[i]=s});render();showResult(true,d.t);return}}catch(e){}render()})();
+</script>
+</body>
+</html>
