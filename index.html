@@ -11,13 +11,13 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;line-height:1.6}
 main{max-width:560px;margin:0 auto;padding:16px}
-h1{font-size:20px;margin:8px 0 4px}
+h1{font-size:22px;margin:8px 0 4px}
 .lead{font-size:13px;color:var(--sub);margin:0 0 12px}
 .prog{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 0;z-index:5;font-size:13px;color:var(--sub)}
 .pbar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin-top:4px}
 .pbar i{display:block;height:100%;background:var(--bar);width:0;transition:width .3s}
 .q{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
-.q h2{font-size:15px;margin:0 0 4px}
+.q h2{font-size:17px;margin:0 0 4px}
 .hint{font-size:12px;color:var(--sub);margin:0 0 8px}
 .o{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:inherit;font-size:14px;color:var(--tx);background:var(--bg);border:1.5px solid var(--bd);border-radius:10px;padding:10px 12px;margin:6px 0;cursor:pointer}
 .o.on{background:var(--acbg);border-color:var(--ac)}
@@ -36,12 +36,13 @@ h1{font-size:20px;margin:8px 0 4px}
 .row.top .l{font-weight:700}
 .desc{font-size:13px;color:var(--sub);margin:4px 0}
 .hide{display:none}
-.res ul{margin:4px 0 12px;padding-left:1.2em;font-size:14px}.res li{margin:4px 0}.res h3{font-size:14px;margin:12px 0 2px;color:var(--ac)}.tag{display:inline-block;font-size:12px;background:var(--acbg);color:var(--ac);border-radius:10px;padding:2px 10px;font-weight:700}.big2{font-size:17px;font-weight:800;margin:6px 0}
+.res ul{margin:4px 0 12px;padding-left:1.2em;font-size:14px}.res li{margin:4px 0}.res h3{font-size:17px;margin:12px 0 2px;color:var(--ac)}.tag{display:inline-block;font-size:16px;background:var(--acbg);color:var(--ac);border-radius:14px;padding:3px 14px;font-weight:700}.big2{font-size:20px;font-weight:800;margin:6px 0}
 </style>
 </head>
 <body>
 <main>
 <h1>優位感覚テスト</h1>
+<div class="res"><span class="tag">このテストでこんなことがわかるよ！</span><ul><li>自分が情報を受け取りやすい形(見る・聞く・体で感じる・言葉で考える)が分かる</li><li>自分に合った学び方・覚え方・伝え方を選びやすくなる</li><li>人に「こうしてもらえると分かりやすい」とお願いできる</li><li>相手の傾向を知ると、伝わりやすい話し方のヒントになる</li><li>直感がどんな形で届きやすいかを知るヒントになる</li></ul><p class="desc">※性格や能力を決めるものではなくて、「今の自分の傾向」を知る目安だよ。どれが高くても低くても、良い悪いはないよ。所要時間は約3分。</p></div>
 <p class="lead">各設問の4つの文を、「自分に当てはまる順」にタップ。<br>1番目=4点 → 2番目=3点 → 3番目=2点 → 4番目=1点。同じ点は2回使えないよ。</p>
 <div class="prog"><span id="pt">0 / 5 問 回答済み</span><div class="pbar"><i id="pb"></i></div></div>
 <div id="qs"></div>
@@ -56,11 +57,11 @@ a:'聞いて理解するのが得意。声のトーンや音に敏感で、音�
 k:'実際にやってみる・触れる・感じることで理解が進む。腑に落ちる感覚や着心地、座り心地を大事にする。体験や実践ワークで学ぶと強い。',
 l:'情報を調べて、論理的に検討してから納得したい。データや言葉の筋道が大事。整理された文章や根拠のある説明で学ぶと入りやすい。'};
 const Q=[
-{t:'ア:重要な決断を下すときは',o:[['勘で決める(腑に落ちる感じ)','k'],['「聞いた感じ」のよさで決める','a'],['「見た感じ」のよさで決める','v'],['その内容をよく調べて、検討してから決める','l']]},
-{t:'イ:人と話し合う(議論する)とき、いちばん影響を受けるのは',o:[['相手の声のトーン(話し方の雰囲気)','a'],['相手の言いたいポイントが、はっきり見えるかどうか','v'],['相手の話の筋が通っているか(論理的かどうか)','l'],['相手の本当の気持ちを感じ取れて、心が通じ合っているかどうか','k']]},
-{t:'ウ:自分の気持ちは',o:[['着る服や外見で、もっともよく表現している','v'],['感情を表すことで、もっともよく表現している','k'],['言葉の選び方で、もっともよく表現している','l'],['声の調子で、もっともよく表現している','a']]},
-{t:'エ:私はどちらかというと',o:[['与えられた状況にあう音楽を選ぶことが得意である','a'],['興味深いテーマに関係した話題を選ぶことが得意である','l'],['座り心地がいい椅子を選ぶことが得意である','k'],['魅力的で豊かな色の組み合わせを選ぶことが得意である','v']]},
-{t:'オ:私が敏感なのは',o:[['私はまわりの音に敏感である','a'],['私は新しい事実やデータを理解することが得意である','l'],['私は衣服の着心地に敏感である','k'],['私は色使いや部屋の外見に敏感である','v']]}
+{t:'1:重要な決断を下すときは',o:[['勘で決める(腑に落ちる感じ)','k'],['「聞いた感じ」のよさで決める','a'],['「見た感じ」のよさで決める','v'],['その内容をよく調べて、検討してから決める','l']]},
+{t:'2:人と話し合う(議論する)とき、いちばん影響を受けるのは',o:[['相手の声のトーン(話し方の雰囲気)','a'],['相手の言いたいポイントが、はっきり見えるかどうか','v'],['相手の話の筋が通っているか(論理的かどうか)','l'],['相手の本当の気持ちを感じ取れて、心が通じ合っているかどうか','k']]},
+{t:'3:自分の気持ちは',o:[['着る服や外見で、もっともよく表現している','v'],['感情を表すことで、もっともよく表現している','k'],['言葉の選び方で、もっともよく表現している','l'],['声の調子で、もっともよく表現している','a']]},
+{t:'4:私はどちらかというと',o:[['与えられた状況にあう音楽を選ぶことが得意である','a'],['興味深いテーマに関係した話題を選ぶことが得意である','l'],['座り心地がいい椅子を選ぶことが得意である','k'],['魅力的で豊かな色の組み合わせを選ぶことが得意である','v']]},
+{t:'5:私が敏感なのは',o:[['私はまわりの音に敏感である','a'],['私は新しい事実やデータを理解することが得意である','l'],['私は衣服の着心地に敏感である','k'],['私は色使いや部屋の外見に敏感である','v']]}
 ];
 const N={v:'ヴィジュアル',a:'オーディオ',k:'キネスセティック',l:'オーディトリー・デジタル'};
 const F={
@@ -83,7 +84,7 @@ const C={
 function det(k,label){return '<div class="res"><span class="tag">'+label+'</span><p class="big2">'+T[k]+'「'+N[k]+'」の人</p><h3>特徴</h3><ul>'+F[k].map(x=>'<li>'+x+'</li>').join('')+'</ul><h3>学習効果を高めるために</h3><ul>'+A[k].map(x=>'<li>'+x+'</li>').join('')+'</ul></div>'}
 function comboBox(p,q,sc){const g=Math.abs(sc[p]-sc[q]);const key=[p,q].sort().join('-');const lv=g<=2?'点差は'+g+'点。ほぼ同じ強さだから、場面によって切り替わる二刀流タイプ。':g<=5?'点差は'+g+'点。1位が軸で、2位が強力なサポート役になっているよ。':'点差は'+g+'点。1位がはっきり軸で、2位は補助的に働いているよ。';return '<div class="res"><span class="tag">組み合わせの読み方</span><p class="big2">'+T[p]+' × '+T[q]+'</p><p class="desc">'+lv+'</p><p>'+C[key]+'</p><p class="desc">※特徴をもとにした目安だよ。</p></div>'}
 const H={v:'映像・色・光・イメージとして、ふっと見えるように届く',a:'声・言葉・音・声のトーンとして、ふっと聞こえるように届く',k:'体の感覚(温かさ・ざわつき・重さ・腹に落ちる感じ)として、ふっと感じるように届く',l:'言葉・文章・「あ、そういうことか」という理解やひらめきとして、ふっと浮かぶように届く'};
-function chanHtml(tops,ord,sc){const rest=ord.filter(k=>!tops.includes(k));let li=tops.map(k=>'<li><b>'+T[k]+'</b>(届きやすい形かも):'+H[k]+'</li>').join('');if(rest.length){li+='<li><b>'+T[rest[0]]+'</b>(2番目に届きやすい形かも):'+H[rest[0]]+'</li>'}return '<div class="res"><span class="tag">チャネリングを受け取るヒント</span><p class="desc">直感は人それぞれ、届き方が違うよ。この結果は、自分にとって直感がどんな形で届きやすいかを知るヒントだよ。</p><ul>'+li+'</ul><p class="desc">決めつけではなくて、あくまで届きやすい形の目安だよ。他の形で届いても大丈夫。来たものをそのまま受け取ってね。</p></div>'}
+function chanHtml(tops,ord,sc){const rest=ord.filter(k=>!tops.includes(k));let li=tops.map(k=>'<li><b>'+T[k]+'</b>(届きやすい形かも):'+H[k]+'</li>').join('');if(rest.length){li+='<li><b>'+T[rest[0]]+'</b>(2番目に届きやすい形かも):'+H[rest[0]]+'</li>'}return '<div class="res"><span class="tag">直感を受け取るヒント</span><p class="desc">直感は人それぞれ、届き方が違うよ。この結果は、自分にとって直感がどんな形で届きやすいかを知るヒントだよ。</p><ul>'+li+'</ul><p class="desc">決めつけではなくて、あくまで届きやすい形の目安だよ。他の形で届いても大丈夫。来たものをそのまま受け取ってね。</p></div>'}
 function detailHtml(tops,ord,sc){let h='';if(tops.length===1){h+=det(tops[0],'第1位');const rest=ord.filter(k=>!tops.includes(k));const m=sc[rest[0]];const secs=rest.filter(k=>sc[k]===m);secs.forEach(k=>{h+=det(k,'第2位')});secs.forEach(k=>{h+=comboBox(tops[0],k,sc)})}else{tops.forEach(k=>{h+=det(k,'同点1位')});for(let i=0;i<tops.length;i++)for(let j=i+1;j<tops.length;j++)h+=comboBox(tops[i],tops[j],sc)}return h}
 const S=Q.map(()=>[]);
 const $=id=>document.getElementById(id);
